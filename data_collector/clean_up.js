@@ -18,7 +18,7 @@ function clean_it(course_section) {
         list[0] != "102641484502798472042" &&
         list[0] != "111808588770635156861" &&
         list[2] != "undefined"
-      ) {
+      ) { 
         final_list.push(list);
       }
     }
@@ -55,27 +55,10 @@ function clean_it(course_section) {
         time_stamps.push(final_list[i][1]);
         dates = Array.from(new Set(non_unique_dates));
         total_days = dates.length;
-        //console.log(dates);
         }
       }
-      //console.log(time_stamps);
-        dates.forEach(function (j) {
-          var c = 0;
-            for(var k=0; k<time_stamps.length; k++){
-              var particular_dates = time_stamps[k].split("T")
-              if(j == particular_dates[0]){
-                  c = c+1;
-              } 
-              //console.log(c);
-            }
-            final_count.push([j, String(c)].join(" : "));
-        });
-        //console.log(dates);
-        //date_time_count = final_count;
-        
-
-      }
-      list_line_by_line.push([name.trim(), email.trim(), final_count.join(", "), String(total_days)].join(", "));
+    }
+      list_line_by_line.push([course_section, student_id, name.trim(), email.trim(), dates.join(",")].join("*"));
         
 }
       
