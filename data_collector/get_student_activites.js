@@ -76,16 +76,21 @@ function getAllData(auth, allFiles, ancestor_name, page_Token) {
             if (x == "name") name = activity.targets[0].driveItem[x];
             if (x == "file") break;
           }
-          for (x in activity.actors[0].user.knownUser)
-            if (x == "personName")
+          for (x in activity.actors[0].user.knownUser){
+            if (x == "personName"){
               ppl_id = activity.actors[0].user.knownUser[x];
-          fs.appendFile(
-            `../data_files/student_activity_details.txt`,
-            `${ppl_id.slice(7)}**${activity.timestamp}**${name}**${title}\n`,
-            (err) => {
-              if (err) console.log(err);
             }
-          );
+      
+          }
+          // ppl_id = activity.actors[0].user.knownUser.personName
+          if (ppl_id != undefined) 
+            fs.appendFile(
+              `../data_files/student_activity_details.txt`,
+              `${ppl_id.slice(7)}**${activity.timestamp}**${name}**${title}\n`,
+              (err) => {
+                if (err) console.log(err);
+              }
+            );
           //people_id.
         });
       }
