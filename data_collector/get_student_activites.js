@@ -1,59 +1,9 @@
 //Given the classroom drive ids and classroom sections this file adds all the activites perfomed in that drive into respective folders
 const fs = require("fs");
-const readline = require("readline");
-const { google } = require("googleapis");
 const lineReaderSync = require("line-reader-sync");
 
-const SCOPES = ["https://www.googleapis.com/auth/drive.activity.readonly https://www.googleapis.com/auth/classroom.profile.emails https://www.googleapis.com/auth/classroom.profile.photos https://www.googleapis.com/auth/classroom.rosters https://www.googleapis.com/auth/classroom.rosters.readonly https://www.googleapis.com/auth/classroom.courses.readonly",]
 
-
-const TOKEN_PATH = "token.json";
-
-fs.readFile("credentials.json", (err, content) => {
-  if (err) return console.log("Error loading client secret file:", err);
-  authorize(JSON.parse(content), listDriveActivity);
-});
-
-function authorize(credentials, callback) {
-  const { client_secret, client_id, redirect_uris } = credentials.installed;
-  const oAuth2Client = new google.auth.OAuth2(
-    client_id,
-    client_secret,
-    redirect_uris[0]
-  );
-
-  fs.readFile(TOKEN_PATH, (err, token) => {
-    if (err) return getNewToken(oAuth2Client, callback);
-    oAuth2Client.setCredentials(JSON.parse(token));
-    callback(oAuth2Client);
-  });
-}
-
-function getNewToken(oAuth2Client, callback) {
-  const authUrl = oAuth2Client.generateAuthUrl({
-    access_type: "offline",
-    scope: SCOPES,
-  });
-  console.log("Authorize this app by visiting this url:", authUrl);
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-  rl.question("Enter the code from that page here: ", (code) => {
-    rl.close();
-    oAuth2Client.getToken(code, (err, token) => {
-      if (err) return console.error("Error retrieving access token", err);
-      oAuth2Client.setCredentials(token);
-      fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
-        if (err) return console.error(err);
-        console.log("Token stored to", TOKEN_PATH);
-      });
-      callback(oAuth2Client);
-    });
-  });
-}
-
-function getAllData(auth, allFiles, ancestor_name, page_Token) {
+module.exports = function getAllData(auth, allFiles, ancestor_name, page_Token) {
   console.log("Me too!");
   return new Promise((resolve, reject) => {
     console.log("Me 3");
@@ -110,7 +60,8 @@ function getAllData(auth, allFiles, ancestor_name, page_Token) {
   });
 }
 
-function listDriveActivity(auth) {
+module.exports = function getStudents(auth) {
+  return new Promise((resolve, reject) => {
   console.log("Me love mangoes");
   var lrs = new lineReaderSync("../data_files/classroom_details.txt");
   while (true) {
@@ -122,6 +73,10 @@ function listDriveActivity(auth) {
     var d = getAllData(auth, data, values[2], "");
     d.then(function () {
       console.log("Happy! : )");
+      resolve()
     });
+    reject()
   }
+})
 }
+

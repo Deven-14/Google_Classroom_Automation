@@ -76,7 +76,7 @@ function clean_it(course_section) {
     
  // `../data_files/section_${course_section}/final_student_activities.txt`
 
-function run() {
+function cleanUp() {
   var lrs_main = new LineReaderSync("../data_files/classroom_details.txt");
   while (true) {
     //var data = [];
@@ -88,4 +88,5 @@ function run() {
     clean_it(values[1]); 
   }
 }
-run();
+// run();
+module.exports = {cleanUp}
