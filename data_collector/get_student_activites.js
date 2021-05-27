@@ -6,7 +6,7 @@ const lineReaderSync = require("line-reader-sync");
 function getAllData(auth, allFiles, ancestor_name, page_Token) {
   console.log("Me too!");
   return new Promise((resolve, reject) => {
-    console.log("Me 3");
+    // console.log("Me 3");
     const drive = google.driveactivity({ version: "v2", auth });
     const params = {
       pageSize: 1000,
@@ -17,7 +17,7 @@ function getAllData(auth, allFiles, ancestor_name, page_Token) {
       if (err) return console.error("The API returned an big error: " + err);
       const activities = res.data.activities;
       if (activities) {
-        console.log("Recent activity:");
+        // console.log("Recent activity:");
         var people_id = [];
         activities.forEach((activity) => {
           var name, title, ppl_id;
@@ -60,9 +60,10 @@ function getAllData(auth, allFiles, ancestor_name, page_Token) {
   });
 }
 
-module.exports = function getStudents(auth) {
-  return new Promise((resolve, reject) => {
-  console.log("Me love mangoes");
+module.exports = function(auth) {
+  // return Promise.resolve("Get Student Activities Succesful!")
+    return new Promise((resolve, reject) => {
+  // console.log("Me love mangoes");
   var lrs = new lineReaderSync("../data_files/classroom_details.txt");
   while (true) {
     var data = [];
@@ -72,10 +73,10 @@ module.exports = function getStudents(auth) {
 
     var d = getAllData(auth, data, values[2], "");
     d.then(function () {
-      console.log("Happy! : )");
+      // console.log("Happy! : )");
       resolve("Done and Dusted!")
     });
-    reject("GO check it")
+    // reject("Reject from getStudentActivity")
   }
 })
 }

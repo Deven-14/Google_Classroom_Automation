@@ -7,11 +7,9 @@ const { google } = require("googleapis");
 const getCourses = require("./get_courses")
 const getStudents = require("./get_students")
 const listDriveActivity = require("./get_student_activites")
-// const cleanUp = require("./clean_up")
-// const makeKickList = require("./make_kick_list");
-const { resolve } = require("path");
-const { rejects } = require("assert");
-
+const cleanUp = require("./clean_up")
+const makeKickList = require("./make_kick_list");
+const purge = require("../Purge/purge_it.js")
 // If modifying these scopes, delete token.json.
 const SCOPES = ["https://www.googleapis.com/auth/drive.activity.readonly https://www.googleapis.com/auth/classroom.profile.emails https://www.googleapis.com/auth/classroom.profile.photos https://www.googleapis.com/auth/classroom.rosters https://www.googleapis.com/auth/classroom.rosters.readonly https://www.googleapis.com/auth/classroom.courses.readonly",]
 // const SCOPES = [ "https://www.googleapis.com/auth/classroom.profile.emails https://www.googleapis.com/auth/classroom.profile.photos https://www.googleapis.com/auth/classroom.rosters https://www.googleapis.com/auth/classroom.rosters.readonly https://www.googleapis.com/auth/classroom.courses.readonly",];
@@ -86,10 +84,16 @@ function getWorkDone(auth) {
   getCourses(auth)
   .then((msg) => {console.log(msg); return getStudents(auth)},(msg) => console.log(msg))
   .then((msg)=>{ console.log(msg); return listDriveActivity(auth)},(msg)=> console.log(msg))
-  .then((msg)=> console.log(msg),(msg)=> console.log(msg))
+  .then((msg)=>{ console.log(msg); return cleanUp()},(msg)=> console.log(msg))
+  .then((msg)=>{ console.log(msg); return makeKickList(3)},(msg)=> console.log(msg))
+  .then((msg)=>{ console.log(msg); return purge()},(msg)=> console.log(msg))
+  .then((msg)=>console.log(msg), (msg)=>console.log(msg))
+
+  // getCourses(auth)
+  // .then(purge().then((msg)=> console.log(msg)))
 
 
-    //   const classroom = google.classroom({ version: "v1", auth });
+  //   const classroom = google.classroom({ version: "v1", auth });
 //   classroom.courses.list(
 //     {
 //       pageSize: 10,

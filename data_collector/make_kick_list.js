@@ -12,7 +12,9 @@ function comparing_dates(recent_date){
         return 123;
 }
 
-function check_consistency(tolerance){
+module.exports = function (tolerance){
+  // return Promise.resolve("MAking kick list successful!")
+  return new Promise((resolve, reject) =>{
     var kick_list = []
     var lrs = new LineReaderSync(
         `../data_files/final_student_data.csv`
@@ -34,15 +36,11 @@ function check_consistency(tolerance){
 
     }
     }
-    console.log(kick_list);
-    var file = fs.createWriteStream(`../data_files/Kick_List.csv`
-          );
-          file.on("error", function (err) {
-            console.log(err);
-          }); 
-          kick_list.forEach(function (v) {
-            file.write(v +"\n");
-          });
-          file.end();
+    // console.log(kick_list);
+    kick_list.forEach((v)=> {
+      fs.appendFileSync(`../data_files/Kick_List.csv`, v +"\n");
+      })
+          resolve("Making Kick List successful!")
+  })
+   
 }
-check_consistency(3)

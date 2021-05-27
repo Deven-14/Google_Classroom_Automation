@@ -15,7 +15,7 @@ function getAllData(auth, allFiles, course_id, page_Token) {
         if (err) return console.error("The API returned an error: " + err);
         const students = res.data.students;
         if (students) {
-          console.log("Recent activity:");
+          // console.log("Recent activity:");
           students.forEach((student) => {
             console.log(
               student.userId,
@@ -48,25 +48,25 @@ function getAllData(auth, allFiles, course_id, page_Token) {
   });
 }
 
-module.exports = function(auth, /*values*/) {
- return new Promise((resolve, reject) => {
-    console.log("Sup");
+module.exports = function(auth) {
+  // return Promise.resolve("Get Students Successful!")
+   return new Promise((resolve, reject) => {
+    // console.log("Sup");
     const classroom = google.classroom({ version: "v1", auth });
    var lrs = new lineReaderSync("../data_files/classroom_details.txt");
-    console.log("Sup2");
+    // console.log("Sup2");
    while (true) {
-      console.log("Sup3");
-//     var data = values
+      // console.log("Sup3");
       var data = [];
      var line = lrs.readline();
-     console.log(line);
+    //  console.log(line);
      if (line == null) {console.log("This is breaking cuz file is still empty");break;}
-      console.log("Sup4");
+      // console.log("Sup4");
       var vals = line.split(", ");
       var d = getAllData(auth, data, vals[1], "");
       d.then(function () {
        resolve("Crazy happy!")
-        console.log("Happy! : )");
+        // console.log("Happy! : )");
       });
     }
  })

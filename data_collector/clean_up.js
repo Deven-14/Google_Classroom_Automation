@@ -61,22 +61,17 @@ function clean_it(course_section) {
       list_line_by_line.push([course_section, student_id, name.trim(), email.trim(), dates.join(",")].join("*"));
         
 }
-      
-        var file = fs.createWriteStream(`../data_files/final_student_data.csv`
-          );
-          file.on("error", function (err) {
-            console.log(err);
-          });
-          list_line_by_line.forEach(function (v) {
-            file.write(v +"\n");
-            //console.log(v);
-          });
-          file.end();
+      list_line_by_line.forEach((v)=> {
+        fs.appendFileSync(`../data_files/final_student_data.csv`, v +"\n");
+        })
 }
     
  // `../data_files/section_${course_section}/final_student_activities.txt`
 
-function cleanUp() {
+ module.exports =function() {
+  // return Promise.resolve("Cleaning Successful!")
+    return new Promise((resolve, reject) => {
+    console.log("Inside cleaning!")
   var lrs_main = new LineReaderSync("../data_files/classroom_details.txt");
   while (true) {
     //var data = [];
@@ -86,7 +81,8 @@ function cleanUp() {
     //console.log("values");
     console.log("Section",values[1]);
     clean_it(values[1]); 
+    resolve("Cleaning successful")
   }
+  reject("Cleaning error!")
+})
 }
-// run();
-module.exports = {cleanUp}

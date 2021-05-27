@@ -2,6 +2,7 @@ const {google} = require("googleapis")
 const fs = require("fs")
 
 module.exports = function (auth) {
+  // return Promise.resolve("Get Courses Successful!")
   return new Promise((resolve, reject) => {
   const classroom = google.classroom({ version: "v1", auth });
   var data = [];
@@ -16,7 +17,7 @@ module.exports = function (auth) {
       }
       const courses = res.data.courses;
       if (courses && courses.length) {
-        console.log("Courses:");
+        // console.log("Courses:");
         courses.forEach((course) => {
           if (course.name == "FastTrackFop2021"){
             data.push(`${course.name}, ${course.id}, ${course.teacherFolder.id}`)
@@ -28,13 +29,14 @@ module.exports = function (auth) {
               }
             );
           }
-          console.log(`${course.name} ${course.section} (${course.id})`);
+          // console.log(`${course.name} ${course.section} (${course.id})`);
         });
        // callback(auth);
-        resolve(data);
+      // console.log("123")
+       resolve("Got Courses");
       } else {
-      reject("Fucked")
-        console.log("No courses found.");
+      reject("No Course Found")
+        // console.log("No courses found.");
       }
     }
   );
