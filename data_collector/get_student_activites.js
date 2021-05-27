@@ -1,9 +1,9 @@
 //Given the classroom drive ids and classroom sections this file adds all the activites perfomed in that drive into respective folders
 const fs = require("fs");
+const {google} = require("googleapis")
 const lineReaderSync = require("line-reader-sync");
 
-
-module.exports = function getAllData(auth, allFiles, ancestor_name, page_Token) {
+function getAllData(auth, allFiles, ancestor_name, page_Token) {
   console.log("Me too!");
   return new Promise((resolve, reject) => {
     console.log("Me 3");
@@ -34,7 +34,7 @@ module.exports = function getAllData(auth, allFiles, ancestor_name, page_Token) 
           }
           // ppl_id = activity.actors[0].user.knownUser.personName
           if (ppl_id != undefined) 
-            fs.appendFile(
+            fs.appendFileSync(
               `../data_files/student_activity_details.txt`,
               `${ppl_id.slice(7)}**${activity.timestamp}**${name}**${title}\n`,
               (err) => {
@@ -73,9 +73,9 @@ module.exports = function getStudents(auth) {
     var d = getAllData(auth, data, values[2], "");
     d.then(function () {
       console.log("Happy! : )");
-      resolve()
+      resolve("Done and Dusted!")
     });
-    reject()
+    reject("GO check it")
   }
 })
 }

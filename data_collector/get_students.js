@@ -22,7 +22,7 @@ function getAllData(auth, allFiles, course_id, page_Token) {
               student.profile.emailAddress,
               student.profile.name.fullName
             );
-            fs.appendFile(
+            fs.appendFileSync(
               `../data_files/student_email_name_id.txt`,
               `${student.userId}**${student.profile.emailAddress}**${student.profile.name.fullName}\n`,
               (err1) => {

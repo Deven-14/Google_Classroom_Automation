@@ -6,7 +6,7 @@ const readline = require("readline");
 const { google } = require("googleapis");
 const getCourses = require("./get_courses")
 const getStudents = require("./get_students")
-// const listDriveActivity = require("./get_student_activites")
+const listDriveActivity = require("./get_student_activites")
 // const cleanUp = require("./clean_up")
 // const makeKickList = require("./make_kick_list");
 const { resolve } = require("path");
@@ -84,10 +84,9 @@ function getNewToken(oAuth2Client, callback) {
 function getWorkDone(auth) {
 
   getCourses(auth)
-  .then((data) => {getStudents(auth, data).then((msg)=> console.log(msg),(msg)=> console.log(msg))})
-
-
-
+  .then((msg) => {console.log(msg); return getStudents(auth)},(msg) => console.log(msg))
+  .then((msg)=>{ console.log(msg); return listDriveActivity(auth)},(msg)=> console.log(msg))
+  .then((msg)=> console.log(msg),(msg)=> console.log(msg))
 
 
     //   const classroom = google.classroom({ version: "v1", auth });
