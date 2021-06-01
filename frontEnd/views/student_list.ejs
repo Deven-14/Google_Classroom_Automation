@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Student List
+        </title>
+    </head>
+    <body>
+        <table border="1">
+            <tr>
+                <th>Name</th>
+                <th>Number of Workind Days</th>
+            </tr>
+            <% for(var i = 0; i < student_list.length; ++i) { %>
+                <tr>
+                    <td><%=student_list[i][2]%></td>
+                    <td><%=student_list[i][4]%></td>
+                </tr>
+            <% }%>
+        </table>
+        <form id="myForm" action="/purge_list" method="post">
+            <input type="text" name="tolerance" placeholder="input tolerance">
+            <input type="submit" value="submit">
+        </form>
+    </body>
+</html>

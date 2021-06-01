@@ -5,6 +5,9 @@ const fs = require("fs");
 function clean_it(course_section) {
   var final_list = [];
   var list_line_by_line = [];
+
+  var list_to_be_returned = [];
+
   var lrs = new LineReaderSync(
     `../data_files/student_activity_details.txt`
   );
@@ -59,30 +62,25 @@ function clean_it(course_section) {
       }
     }
       list_line_by_line.push([course_section, student_id, name.trim(), email.trim(), dates.join(",")].join("*"));
-        
-}
+      list_to_be_returned.push([course_section, student_id, name.trim(), email.trim(), dates.length]);
+  }
       list_line_by_line.forEach((v)=> {
         fs.appendFileSync(`../data_files/final_student_data.csv`, v +"\n");
         })
+
+      return list_to_be_returned;
 }
     
  // `../data_files/section_${course_section}/final_student_activities.txt`
 
- module.exports =function() {
+module.exports = function(course_id) {
   // return Promise.resolve("Cleaning Successful!")
-    return new Promise((resolve, reject) => {
-    console.log("Inside cleaning!")
-  var lrs_main = new LineReaderSync("../data_files/classroom_details.txt");
-  while (true) {
-    //var data = [];
-    var line = lrs_main.readline();
-    if (line == null) break;
-    var values = line.split(", ");
-    //console.log("values");
-    console.log("Section",values[1]);
-    clean_it(values[1]); 
-    resolve("Cleaning successful")
-  }
-  reject("Cleaning error!")
-})
+
+  fs.unlink("../data_files/final_student_data.csv", (err1) => { if (err1) throw err; });
+
+  return new Promise((resolve, reject) => {
+    var list = clean_it(course_id);
+    console.log("cleaning done");
+    resolve(list);
+  })
 }

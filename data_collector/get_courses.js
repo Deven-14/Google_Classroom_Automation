@@ -1,8 +1,11 @@
 const {google} = require("googleapis")
-const fs = require("fs")
+const fs = require("fs");
 
 module.exports = function (auth) {
   // return Promise.resolve("Get Courses Successful!")
+
+  fs.unlink("../data_files/classroom_details.txt", (err1) => { if (err1) throw err; });
+
   return new Promise((resolve, reject) => {
   const classroom = google.classroom({ version: "v1", auth });
   var data = [];
@@ -13,16 +16,16 @@ module.exports = function (auth) {
     (err, res) => {
       if (err) {
         console.error("The API returned an error: " + err);
-        reject()
+        reject("API error");
       }
       const courses = res.data.courses;
       if (courses && courses.length) {
         // console.log("Courses:");
         courses.forEach((course) => {
           if (course.name == "FastTrackFop2021"){
-            data.push(`${course.name}, ${course.id}, ${course.teacherFolder.id}`)
+            data.push({ name : course.name,  id : course.id, teacherId : course.teacherFolder.id });
             fs.appendFileSync(
-              "C:/Users/vijay/Desktop/Projects/Srini_Sir/Classroom_Automation/data_files/classroom_details.txt",
+              "../data_files/classroom_details.txt",
               `${course.name}, ${course.id}, ${course.teacherFolder.id}\n`,
               (err1) => {
                 if (err1) throw err;
@@ -33,13 +36,14 @@ module.exports = function (auth) {
         });
        // callback(auth);
       // console.log("123")
-       resolve("Got Courses");
+       //resolve(data);
+       resolve(data);
       } else {
-      reject("No Course Found")
+       reject("No Course Found")
         // console.log("No courses found.");
       }
     }
   );
-})
+  })
 }
 

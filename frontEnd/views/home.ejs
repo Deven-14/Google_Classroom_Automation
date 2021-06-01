@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        Purge Page
+    </title>
+</head>
+
+<body>
+
+    <h1>Hello World!</h1>
+    <form id="myForm" action="/student_list" method="post">
+        Choose a course:
+        <select name="course">
+            <% for(var i = 0; i < courses.length; ++i) { %>
+                <option value="<%=courses[i].name%>**<%=courses[i].id%>**<%=courses[i].teacherId%>"><%=courses[i].name%></option>
+            <% }%>
+        </select>
+        <input type="submit" value="submit">
+    </form>
+</body>
+</html>

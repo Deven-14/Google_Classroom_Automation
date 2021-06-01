@@ -13,6 +13,9 @@ function comparing_dates(recent_date){
 }
 
 module.exports = function (tolerance){
+
+  //fs.unlink("../data_files/Kick_List.csv", (err1) => { if (err1) throw err; });
+
   // return Promise.resolve("MAking kick list successful!")
   return new Promise((resolve, reject) =>{
     var kick_list = []
@@ -30,7 +33,7 @@ module.exports = function (tolerance){
         var user_id = list[1]
         var date_strings = list[4].split(",");
         var lapses = comparing_dates(date_strings[0]);
-        if (lapses>(tolerance - 1)){
+        if (lapses>(tolerance - 2)){
             kick_list.push([course_id, user_id, lapses].join(","))
         }
 
@@ -40,7 +43,9 @@ module.exports = function (tolerance){
     kick_list.forEach((v)=> {
       fs.appendFileSync(`../data_files/Kick_List.csv`, v +"\n");
       })
-          resolve("Making Kick List successful!")
+    for(var i = 0; i < kick_list.length; ++i)
+      kick_list[i] = kick_list[i].split(',');
+    resolve(kick_list);
   })
    
 }

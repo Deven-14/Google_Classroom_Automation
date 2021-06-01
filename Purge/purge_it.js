@@ -23,8 +23,7 @@ function Purging(auth, courseId, studentId){
 
 
 
-module.exports = 
-function run(auth) {
+module.exports = function run(auth) {
   var count = 0
   return new Promise((resolve, reject)=> {
     // console.log("************************working in purge *******************************")

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            purge List
+        </title>
+    </head>
+    <body>
+        <table border="1">
+            <tr>
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+            </tr>
+            <% for(var i = 0; i < student_list.length; ++i) { %>
+                <tr>
+                    <% for(var j = 0; j < student_list[i].length; ++j) { %>
+                        <td><%=student_list[i][j]%></td>
+                    <% }%>
+                </tr>
+            <% }%>
+        </table>
+        <form id="myForm" action="/purge_completed" method="post">
+            <input type="submit" value="submit">
+        </form>
+    </body>
+</html>

@@ -3,71 +3,57 @@ const { google } = require("googleapis");
 const lineReaderSync = require("line-reader-sync");
 
 
-
-function getAllData(auth, allFiles, course_id, page_Token) {
+function getAllData(classroom, course_id) {
   console.log("Me too!");
-  return new Promise((resolve, reject) => {
+  var allFiles = [];
+  var page_Token = "";
+  return new Promise(async (resolve, reject) => {
     console.log("Me 3");
-    const classes = google.classroom({ version: "v1", auth });
-    classes.courses.students.list(
-      { courseId: course_id, pageSize: 1000, pageToken: page_Token },
-      (err, res) => {
-        if (err) return console.error("The API returned an error: " + err);
-        const students = res.data.students;
-        if (students) {
-          // console.log("Recent activity:");
-          students.forEach((student) => {
-            console.log(
-              student.userId,
-              student.profile.emailAddress,
-              student.profile.name.fullName
-            );
-            fs.appendFileSync(
-              `../data_files/student_email_name_id.txt`,
-              `${student.userId}**${student.profile.emailAddress}**${student.profile.name.fullName}\n`,
-              (err1) => {
-                if (err1) console.log(err1);
-              }
-            );
+
+    do{
+      var getAPagePromise = new Promise((resolve2, reject2) => {
+
+        classroom.courses.students.list(
+          { courseId: course_id, pageSize: 1000, pageToken: page_Token },
+          (err, res) => {
+            if (err) return console.error("The API returned an error: " + err);
+            const students = res.data.students;
+            if (students) {
+              // console.log("Recent activity:");
+              students.forEach((student) => {
+                //console.log(student.userId, student.profile.emailAddress, student.profile.name.fullName);
+                allFiles.push(`${student.userId}**${student.profile.emailAddress}**${student.profile.name.fullName}`);
+                fs.appendFileSync(
+                  `../data_files/student_email_name_id.txt`,
+                  `${student.userId}**${student.profile.emailAddress}**${student.profile.name.fullName}\n`,
+                  (err1) => {
+                    if (err1) console.log(err1);
+                  }
+                );
+              });
+            }
+            resolve2(res.data.nextPageToken);
           });
-        }
-        if (res.data.nextPageToken) {
-          getAllData(
-            auth,
-            allFiles,
-            course_id,
-            res.data.nextPageToken
-          ).then((resAllFiles) => {
-            resolve(resAllFiles);
-          });
-        } else {
-          resolve(allFiles);
-        }
-      }
-    );
+
+      });
+
+      page_Token = await getAPagePromise;
+    
+    }while(page_Token);
+    
+    resolve(allFiles);
   });
 }
 
-module.exports = function(auth) {
+module.exports = function(auth, course_id) {
   // return Promise.resolve("Get Students Successful!")
-   return new Promise((resolve, reject) => {
+
+  fs.unlink("../data_files/student_email_name_id.txt", (err1) => { if (err1) throw err; });
+
+  return new Promise(async (resolve, reject) => {
     // console.log("Sup");
     const classroom = google.classroom({ version: "v1", auth });
-   var lrs = new lineReaderSync("../data_files/classroom_details.txt");
-    // console.log("Sup2");
-   while (true) {
-      // console.log("Sup3");
-      var data = [];
-     var line = lrs.readline();
-    //  console.log(line);
-     if (line == null) {console.log("This is breaking cuz file is still empty");break;}
-      // console.log("Sup4");
-      var vals = line.split(", ");
-      var d = getAllData(auth, data, vals[1], "");
-      d.then(function () {
-       resolve("Crazy happy!")
-        // console.log("Happy! : )");
-      });
-    }
- })
+    var data = await getAllData(classroom, course_id);
+    resolve(data);
+  })
 }
