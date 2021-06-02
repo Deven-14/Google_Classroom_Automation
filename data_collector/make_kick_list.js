@@ -40,9 +40,9 @@ module.exports = function (tolerance){
     }
     }
     // console.log(kick_list);
-    kick_list.forEach((v)=> {
-      fs.appendFileSync(`../data_files/Kick_List.csv`, v +"\n");
-      })
+    temp = kick_list.join('\n');
+    fs.writeFileSync(`../data_files/Kick_List.csv`, temp,{encoding:'utf8',flag:'w'});
+
     for(var i = 0; i < kick_list.length; ++i)
       kick_list[i] = kick_list[i].split(',');
     resolve(kick_list);

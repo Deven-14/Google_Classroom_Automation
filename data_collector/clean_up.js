@@ -64,10 +64,12 @@ function clean_it(course_section) {
       list_line_by_line.push([course_section, student_id, name.trim(), email.trim(), dates.join(",")].join("*"));
       list_to_be_returned.push([course_section, student_id, name.trim(), email.trim(), dates.length]);
   }
-      list_line_by_line.forEach((v)=> {
-        fs.appendFileSync(`../data_files/final_student_data.csv`, v +"\n");
-        })
-
+      list_line_by_line = list_line_by_line.join('\n');
+      //list_line_by_line.forEach((v)=> {
+        //fs.writeFileSync(`../data_files/final_student_data.csv`, v +"\n",{encoding:'utf8',flag:'w'});
+        //})
+      fs.writeFileSync(`../data_files/final_student_data.csv`, list_line_by_line, {encoding:'utf8',flag:'w'});
+      
       return list_to_be_returned;
 }
     
@@ -76,7 +78,7 @@ function clean_it(course_section) {
 module.exports = function(course_id) {
   // return Promise.resolve("Cleaning Successful!")
 
-  fs.unlink("../data_files/final_student_data.csv", (err1) => { if (err1) throw err; });
+  //fs.unlink("../data_files/final_student_data.csv", (err1) => { if (err1) console.log(err1); });
 
   return new Promise((resolve, reject) => {
     var list = clean_it(course_id);

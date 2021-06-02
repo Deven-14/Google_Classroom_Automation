@@ -34,7 +34,11 @@ module.exports = function run(auth) {
     // console.log("************************working in purge *******************************")
       var values = line.split(",");
       count += Purging(auth, values[0], values[1])
-    }if (count > 0) resolve("students deleted")
+    }
+    if (count > 0) 
+      resolve("STUDENTS PURGED!");
+    else
+      resolve("No Students to Purge");
   })
 }
 // console.log(run())

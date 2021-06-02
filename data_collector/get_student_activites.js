@@ -33,13 +33,7 @@ function getAllData(drive, params) {
                 }
           
               if (ppl_id != undefined) 
-                fs.appendFileSync(
-                  `../data_files/student_activity_details.txt`,
-                  `${ppl_id.slice(7)}**${activity.timestamp}**${name}**${title}\n`,
-                  (err) => {
-                    if (err) console.log(err);
-                  }
-                );
+                allFiles.push([ppl_id.slice(7), activity.timestamp, name, title].join('**'));
               //people_id.
               //console.log("after if activity");
             });
@@ -54,14 +48,14 @@ function getAllData(drive, params) {
 
     }while(params.pageToken);
 
-    resolve();
+    resolve(allFiles);
   });
 }
 
 module.exports = function(auth, course_teacher_id) {
   // return Promise.resolve("Get Student Activities Succesful!")
 
-  fs.unlink("../data_files/student_activity_details.txt", (err1) => { if (err1) throw err; });
+  //fs.unlink("../data_files/student_activity_details.txt", (err1) => { if (err1) console.log(err1); });
 
   return new Promise(async (resolve, reject) => {
     var ancestor_name = course_teacher_id;
@@ -70,9 +64,21 @@ module.exports = function(auth, course_teacher_id) {
       pageSize: 1000,
       ancestorName: `items/${ancestor_name}`,
       pageToken: "",
+      filter: "time >= \"2021-05-31T00:00:00-05:00\"",
     };
     var data = await getAllData(drive, params);
+    data = data.join('\n');
+    fs.writeFileSync(
+      `../data_files/student_activity_details.txt`,
+      data,
+      {encoding:'utf8',flag:'w'},
+      (err) => {
+        if (err) console.log(err);
+      }
+    );
+    
     resolve();
 })
 }
 
+ //`${ppl_id.slice(7)}**${activity.timestamp}**${name}**${title}\n`,

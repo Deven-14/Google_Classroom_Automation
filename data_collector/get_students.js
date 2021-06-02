@@ -23,13 +23,7 @@ function getAllData(classroom, course_id) {
               students.forEach((student) => {
                 //console.log(student.userId, student.profile.emailAddress, student.profile.name.fullName);
                 allFiles.push(`${student.userId}**${student.profile.emailAddress}**${student.profile.name.fullName}`);
-                fs.appendFileSync(
-                  `../data_files/student_email_name_id.txt`,
-                  `${student.userId}**${student.profile.emailAddress}**${student.profile.name.fullName}\n`,
-                  (err1) => {
-                    if (err1) console.log(err1);
-                  }
-                );
+                
               });
             }
             resolve2(res.data.nextPageToken);
@@ -41,6 +35,17 @@ function getAllData(classroom, course_id) {
     
     }while(page_Token);
     
+    temp = allFiles.join('\n');
+    
+    fs.writeFileSync(
+      `../data_files/student_email_name_id.txt`,
+      temp,
+      {encoding:'utf8',flag:'w'},
+      (err1) => {
+        if (err1) console.log(err1);
+      }
+    );
+
     resolve(allFiles);
   });
 }
@@ -48,7 +53,7 @@ function getAllData(classroom, course_id) {
 module.exports = function(auth, course_id) {
   // return Promise.resolve("Get Students Successful!")
 
-  fs.unlink("../data_files/student_email_name_id.txt", (err1) => { if (err1) throw err; });
+  //fs.unlink("../data_files/student_email_name_id.txt", (err1) => { if (err1) throw err; });
 
   return new Promise(async (resolve, reject) => {
     // console.log("Sup");
