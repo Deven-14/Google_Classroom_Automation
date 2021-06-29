@@ -63,8 +63,8 @@ module.exports = function(auth, course_teacher_id) {
     const params = {
       pageSize: 1000,
       ancestorName: `items/${ancestor_name}`,
-      pageToken: "",
-      filter: "time >= \"2021-05-31T00:00:00-05:00\"",
+      pageToken: ""
+      // ,filter: "time >= \"2021-02-28T00:00:00-05:00\"",
     };
     var data = await getAllData(drive, params);
     data = data.join('\n');

@@ -13,7 +13,7 @@ module.exports = function (auth) {
 
   classroom.courses.list(
     {
-      pageSize: 10,
+      pageSize: 1000,
     },
     (err, res) => {
       if (err) {
