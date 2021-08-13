@@ -1,0 +1,7 @@
+data_collector/node_modules/
+data_files/node_modules/
+/frontEnd/node_modules
+/node_modules
+data_collector/credentials.json
+data_collector/token.json
+data_files/
